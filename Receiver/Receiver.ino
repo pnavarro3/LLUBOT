@@ -1,6 +1,16 @@
 #include <ESP8266WiFi.h>
 #include <espnow.h>
 
+
+struct nombreStruct {
+  float angle;
+  float distance;
+  int id;
+  
+};
+
+
+
 // Callback cuando llegan datos
 void onDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len) {
   Serial.print("Datos recibidos: ");
