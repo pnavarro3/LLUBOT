@@ -28,6 +28,7 @@ def recibirDatos(sock):
                     robot_info[key] = float(value)
             with lock:
                 datos_robots.append(robot_info)
+                enviarDatos(sock, "Hola Mundo", IP, PORT)
         except Exception as e:
             print(f"Error parseando mensaje: {msg} -> {e}")
 

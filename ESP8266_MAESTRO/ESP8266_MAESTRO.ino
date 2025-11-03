@@ -14,16 +14,12 @@ WiFiUDP Udp;
 char packetBuffer[255];
 
 //----- ESPNOW -----//
-const int numRobots = 4;
+const int numRobots = 2;
 int currentRobot = 0;
 uint8_t robotMACs[numRobots][6] = {
-  {0x5C,0xCF,0x7F,0xB5,0x64,0x10}, // Robot 0
-  {0xAA,0xBB,0xCC,0xDD,0xEE,0x02}, // Robot 1
-  {0xAA,0xBB,0xCC,0xDD,0xEE,0x03}, // Robot 2
-  {0xAA,0xBB,0xCC,0xDD,0xEE,0x04}  // Robot 3
-  //...
+  {0xCC,0x50,0xE3,0x55,0x09,0x6A}, // Robot 0
+  {0x5C,0xCF,0x7F,0x01,0x65,0x6B}, // Robot 1
 };
-
 
 //----- CALLBACK ENVIO ESPNOW -----//
 void OnDataSent(uint8_t *mac_addr, uint8_t sendStatus) {
@@ -109,9 +105,10 @@ void setup() {
 void loop() {
   readUDP();
   sendTurn();
+  delay(100);
   currentRobot++;
   if (currentRobot >= numRobots) {
     currentRobot = 0;
   }
-  delay(200);
+  delay(100);
 }

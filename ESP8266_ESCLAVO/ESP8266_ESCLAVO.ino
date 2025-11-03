@@ -7,8 +7,8 @@
 #define password "611b10a883c5"
 
 //----- ID Y MAC ROBOT -----//
-#define robotID 0
-uint8_t masterMAC[] = {0xA4,0xCF,0x12,0xF5,0x20,0x53};
+#define robotID 1
+uint8_t masterMAC[] = {0x68,0xC6,0x3A,0x9F,0x98,0x65};
 
 //----- MENSAJE ESPNOW -----//
 char incomingMsg[50];
@@ -17,6 +17,7 @@ int expectedTurn = -1;
 
 //----- CALLBACK RECEPCION ESPNOW -----//
 void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len) {
+  Serial.println("REcibido");
   memcpy(incomingMsg, incomingData, len);
   incomingMsg[len] = 0;
   if (sscanf(incomingMsg, "TURN %d", &expectedTurn) == 1) {
@@ -25,7 +26,6 @@ void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len) {
       float ang = 112.4767753210715;
       float dist = 0.09923435538142777;
       int Out = 0;
-
       char msgOut[100];
       sprintf(msgOut, "id=%d, ang=%.13f, dist=%.14f, Out=%d", robotID, ang, dist, Out);
       esp_now_send(masterMAC, (uint8_t *)msgOut, strlen(msgOut));
