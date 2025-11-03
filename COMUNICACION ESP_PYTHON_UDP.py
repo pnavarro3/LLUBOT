@@ -7,14 +7,14 @@ IP = "255.255.255.255"
 PORT = 8888
 
 lock = Lock()
-datos_robots = []  # Lista de diccionarios con los datos recibidos
+datos_robots = []
 
 def recibirDatos(sock):
     while True:
         data, addr = sock.recvfrom(1024)
         msg = data.decode(errors="ignore").strip()
         
-        # Parsear el mensaje recibido, formato esperado: "id=0, ang=112.4767753210715, dist=0.09923435538142777, Out=0"
+        
         try:
             partes = msg.split(',')
             robot_info = {}
@@ -27,7 +27,7 @@ def recibirDatos(sock):
                 elif key in ['ang', 'dist']:
                     robot_info[key] = float(value)
             with lock:
-                datos_robots.append(robot_info)  # Guardar en la lista
+                datos_robots.append(robot_info)
         except Exception as e:
             print(f"Error parseando mensaje: {msg} -> {e}")
 
