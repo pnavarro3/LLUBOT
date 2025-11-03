@@ -1,52 +1,51 @@
+# ---- LIBRERIAS ---- #
 import socket
-import threading
-from threading import Lock
 import time
 
+# ---- CONSTANTES ---- #
 IP = "255.255.255.255"
 PORT = 8888
 
-lock = Lock()
-datos_robots = []
+# ---- FUNCIÓN ENVIAR AL MAESTRO: ID ROBOT DESTINO Y POSE---- #
+def enviarRobot(id_robot, ang, dist, out):
+    msg1 = f"id={id_robot}, ang={ang}, dist={dist}, Out={out}"
+    sock.sendto(msg1.encode(), (IP, PORT))
+    print(f"[ENVIADO → Robot {id_robot}] {msg1}")
 
-def recibirDatos(sock):
-    while True:
+# ---- FUNCIÓN RECIBIR RESPUESTA MAESTRO: ESTADO ROBOT ---- #
+def recibirRespuesta():
+    try:
         data, addr = sock.recvfrom(1024)
-        msg = data.decode(errors="ignore").strip()
-        
-        
-        try:
-            partes = msg.split(',')
-            robot_info = {}
-            for p in partes:
-                key, value = p.split('=')
-                key = key.strip()
-                value = value.strip()
-                if key in ['id', 'Out']:
-                    robot_info[key] = int(value)
-                elif key in ['ang', 'dist']:
-                    robot_info[key] = float(value)
-            with lock:
-                datos_robots.append(robot_info)
-                enviarDatos(sock, "Hola Mundo", IP, PORT)
-        except Exception as e:
-            print(f"Error parseando mensaje: {msg} -> {e}")
+        msg2 = data.decode(errors="ignore").strip()
 
-def enviarDatos(sock, msg, ip, port):
-    sock.sendto(msg.encode(), (ip, port))
-    print(f"[Enviado -> {ip}:{port}] {msg}")
+        if msg2.startswith("OK"):
+            print(f"[RESPUESTA ← ESP] {msg2}")
+    except socket.timeout:
+        pass
 
+# ---- MAIN LOOP ---- #
 if __name__ == "__main__":
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     sock.bind(("", PORT))
+    sock.settimeout(0.2)
 
-    hilo_recepcion = threading.Thread(target=recibirDatos, args=(sock,), daemon=True)
-    hilo_recepcion.start()
-
+    i = 0
     while True:
-        with lock:
-            for robot in datos_robots:
-                print(f"Robot {robot['id']} -> ang: {robot['ang']}, dist: {robot['dist']}, Out: {robot['Out']}")
-            datos_robots.clear()
-        time.sleep(0.05)
+        id_robot = i
+        ang = 45.0
+        dist = 0.1
+        out = 0
+
+        enviarRobot(id_robot, ang, dist, out)
+
+        start = time.time()
+        while time.time() - start < 0.3:
+            recibirRespuesta()
+
+        if i > 1:
+            i = 0
+        else:
+            i += 1
+        
+        time.sleep(0.2)
