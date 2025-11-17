@@ -31,13 +31,11 @@ class SlaveComm {
 
     void sendOK();
 
-    // método interno que el callback global llamará
     void processIncoming(const char *msg);
 };
 
-// callback global requerido por ESP-NOW
 void ESPNOWReceiveCallback(uint8_t *mac, uint8_t *incomingMsg, uint8_t len);
 
-extern SlaveComm *globalSlave;   // puntero global a la instancia
+extern SlaveComm *globalSlave;
 
 #endif

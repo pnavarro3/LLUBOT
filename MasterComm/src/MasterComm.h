@@ -12,14 +12,12 @@ public:
 
     bool begin(const char *ssid, const char *password, unsigned int udpPort);
 
-    // Configuración
     void addRobotMAC(uint8_t mac[6]);
     void enableBroadcastIP(const char *ip) { _broadcastIP = ip; }
 
-    // Lógica principal
-    void readUDP();                // recibe mensajes desde Python
+    void readUDP();
     void sendToRobot(int id, const char *msg);
-    void processRobotResponse(const char *msg);  // llamado desde callback
+    void processRobotResponse(const char *msg);
 
 private:
     WiFiUDP _udp;
@@ -31,11 +29,9 @@ private:
     int _robotCount;
 };
 
-// ---- Callbacks globales requeridos por ESP-NOW ----
 void Master_OnDataSent(uint8_t *mac_addr, uint8_t sendStatus);
 void Master_OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len);
 
-// puntero global a la instancia
 extern MasterComm *MasterGlobal;
 
 #endif
