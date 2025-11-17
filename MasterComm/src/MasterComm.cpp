@@ -5,7 +5,7 @@ MasterComm *MasterGlobal = nullptr;       // Puntero global para acceder a la in
 
 // CALLBACK: Envío
 void Master_OnDataSent(uint8_t *mac_addr, uint8_t sendStatus) {
-    Serial.println(sendStatus == 0 ? "ESPNOW enviado" : "Error envío");  
+    //Serial.println(sendStatus == 0 ? "ESPNOW enviado" : "Error envío");  
     // Muestra si el envío por ESP-NOW fue exitoso
 }
 
