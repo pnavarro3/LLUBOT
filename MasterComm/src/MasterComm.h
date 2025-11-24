@@ -26,6 +26,7 @@ public:
     int getOut() { return _out; }
 
     bool dataChanged();
+    
 
 private:
     WiFiUDP _udp;                // Objeto UDP para enviar/recibir datagramas
