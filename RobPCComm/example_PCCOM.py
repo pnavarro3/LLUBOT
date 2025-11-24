@@ -16,7 +16,8 @@ i = 0
 while True:
     # Elige id robot a enviar mensaje
     id_robot = robot_comm.robots[i]
-
+    ang = ang + 1.0
+    dist = dist + 0.5
 
     # Enviar comando parametros
     robot_comm.enviarRobot(id_robot, ang, dist, out)
