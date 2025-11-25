@@ -1,6 +1,9 @@
 [submodule "RobPCComm"]
 	path = RobPCComm
 	url = https://github.com/pnavarro3/RobPCComm
+	branch = main
 [submodule "COMUNICACIONES_ROBOT"]
 	path = COMUNICACIONES_ROBOT
 	url = https://github.com/RubenSah-ing/COMUNICACIONES_ROBOT.git
+	branch = main
+	
